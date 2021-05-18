@@ -7,15 +7,37 @@ import axios from 'axios';
 	// ... submit to API or something
 };*/
 function Login() {
-	const history = useHistory();
-	const [data, setdata] = useState();
-	const [input, setInput] = useState({
+	const [loginResponse, setloginResponse] = useState();
+	const [form, setForm] = useState({
 		username: '',
 		password: '',
 	});
-	const postData = async () => {
-		let { data } = await axios.post('http://localhost:5000/user/login', { access_token: input });
-		setdata(data);
+	const [data, setData] = useState();
+
+	const history = useHistory();
+	const submit = async () => {
+		const loginResponse = await axios
+			.post(`http://localhost:5000/user/login`, { username: form.username, password: form.password })
+			.catch((err) => console.log('Error', err));
+		console.log(loginResponse);
+		setloginResponse(loginResponse);
+		const user = JSON.parse(localStorage.getItem('user'));
+
+		if (loginResponse !== undefined) {
+			console.log(loginResponse.data.data.access_token);
+			if (loginResponse.data.data.access_token) {
+				localStorage.setItem('user', JSON.stringify(loginResponse.data.data?.access_token));
+			}
+		}
+	};
+	const logout = () => {
+		localStorage.removeItem('user');
+	};
+	const handel = (e) => {
+		const intermediateState = { ...form };
+		console.log(e.target.name);
+		intermediateState[e.target.name] = e.target.value;
+		setForm({ ...intermediateState });
 	};
 
 	return (
