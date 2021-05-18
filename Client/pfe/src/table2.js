@@ -24,14 +24,22 @@ const Table = () => {
 	};
 
 	const [form, setForm] = useState(initialState);
-
 	const [data, setdata] = useState();
-
 	const postData = async () => {
-		let { data } = await axios.post('http://localhost:5000/prix/', { newData: form });
+		let { data } = await axios.post('http://localhost:5000/prix/', {
+			newData: form,
+		});
 		setdata(data);
+		console.log(data);
 	};
-	const handel = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
+	const handel = (e) => {
+		const intermediateState = { ...form };
+		console.log(e.target.name);
+		intermediateState[e.target.name] = e.target.value;
+		setForm({ ...intermediateState });
+		console.log(intermediateState);
+	};
 
 	return (
 		<div>
