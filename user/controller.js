@@ -5,7 +5,7 @@ const bcrybt = require('bcrypt');
 const signupUser = async (req, res) => {
 	const { dprh, port, nom, prenom, username, email, password } = req.body;
 	try {
-		const user = await User.findOne({ email });
+		const user = await User.findOne({ email } && { username } && { dprh } && { port });
 
 		if (user) {
 			return res.status(400).json({
@@ -41,12 +41,12 @@ const loginUser = async (req, res) => {
 			});
 		}
 		const compare = await bcrybt.compare(password, user.password);
-		if (compare == false) {
+		if (compare === false) {
 			return res.status(400).json({
 				message: 'wrong credta',
 			});
 		}
-		const token = jwt.sign({ email: user.email }, process.env.PRIVATE_KEY);
+		const token = jwt.sign({ username: user.username }, process.env.PRIVATE_KEY);
 		if (!token) {
 			return res.status(500).json({
 				message: 'server error',
@@ -68,7 +68,7 @@ const loginUser = async (req, res) => {
 const getInfoUser = async (req, res) => {
 	try {
 		const data = req.data;
-		const user = await User.findOne({ email: data.email }, '-_id -password');
+		const user = await User.findOne({ username: data.username }, '-_id -password');
 		if (!user) {
 			return res.status(400).json({
 				message: 'non found',
@@ -79,11 +79,10 @@ const getInfoUser = async (req, res) => {
 			data: {
 				dprh: user.dprh,
 				port: user.port,
-				email: user.email,
-				username: user.username,
 				nom: user.name,
 				prenom: user.prenom,
-				//createdAt: user.
+				username: user.username,
+				email: user.email,
 			},
 		});
 	} catch (error) {
