@@ -1,14 +1,16 @@
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 
-const authUser = (req, res) => {
+const authUser = (req, res, next) => {
 	try {
-		const token = req.headers.authrization ? req.headers.authrization.split('')[1] : '';
-		if (token) {
-			const error = new error('access denied');
-			return next(error);
+		//	const token = req.headers.authorization ? req.headers.authorization.split('')[1] : '';
+		const token = req.headers['x-access-token'];
+
+		if (!token) {
+			const error = new Error('access denied');
+			return next(console.error('nice'));
 		}
-		const data = jwt.verify(token.process.env.PRIVATE_KEY);
+		const data = jwt.verify(token, process.env.PRIVATE_KEY);
 		req.data = data;
 		next();
 	} catch (error) {
@@ -16,3 +18,4 @@ const authUser = (req, res) => {
 	}
 };
 module.exports = authUser;
+
