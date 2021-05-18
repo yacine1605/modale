@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 /*const handleSubmit = () => {
 	// ... get data form
-	// ... submit to API or something
+	// ... submit to API
+     or something
 };*/
+//	const [data, setdata] = useState();
+//	const [form, setForm] = useState(initialState);
 function Login() {
 	const [loginResponse, setloginResponse] = useState();
 	const [form, setForm] = useState({
@@ -43,23 +47,23 @@ function Login() {
 	return (
 		<>
 			<h2> Marhba </h2>
-			<form onSubmit={(e) => e.prevent.default}>
+			<form onSubmit={(e) => e.preventDefault()}>
 				<div className="imgcontainer">
 					<img src="img_avatar2.png" alt="Avatar" className="avatar" />
 				</div>
 
 				<div className="container">
-					<label htmlFor="uname">
+					<label>
 						<b>Username</b>
 					</label>
 					<input
+						name="username"
 						type="text"
 						placeholder="Enter Username"
 						required
 						onChange={(e) => {
-							setInput(e.target.value);
+							handel(e);
 						}}
-						value={input.username}
 					/>
 
 					<label htmlFor="psw">
@@ -67,14 +71,15 @@ function Login() {
 					</label>
 					<input
 						type="password"
+						name="password"
 						placeholder="Enter Password"
+						required
 						onChange={(e) => {
-							setInput(e.target.value);
+							handel(e);
 						}}
-						value={input.password}
 					/>
 
-					<button type="submit" onClick={() => postData()}>
+					<button type="submit" onClick={submit}>
 						Login
 					</button>
 				</div>
