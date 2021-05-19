@@ -11,7 +11,7 @@ import { useEffect } from 'react';
 };*/
 //	const [data, setdata] = useState();
 //	const [form, setForm] = useState(initialState);
-const Login = ({ authorized }) => {
+const Login = () => {
 	const [loginResponse, setloginResponse] = useState();
 	const [form, setForm] = useState({
 		username: '',
