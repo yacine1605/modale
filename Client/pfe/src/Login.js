@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
-
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
+import Table from './table2';
+import { useEffect } from 'react';
 
 /*const handleSubmit = () => {
 	// ... get data form
@@ -10,7 +11,7 @@ import axios from 'axios';
 };*/
 //	const [data, setdata] = useState();
 //	const [form, setForm] = useState(initialState);
-function Login() {
+const Login = ({ authorized }) => {
 	const [loginResponse, setloginResponse] = useState();
 	const [form, setForm] = useState({
 		username: '',
@@ -23,17 +24,27 @@ function Login() {
 		const loginResponse = await axios
 			.post(`http://localhost:5000/user/login`, { username: form.username, password: form.password })
 			.catch((err) => console.log('Error', err));
-		console.log(loginResponse);
+		//console.log(loginResponse);
 		setloginResponse(loginResponse);
+
 		const user = JSON.parse(localStorage.getItem('user'));
 
-		if (loginResponse !== undefined) {
-			console.log(loginResponse.data.data.access_token);
-			if (loginResponse.data.data.access_token) {
-				localStorage.setItem('user', JSON.stringify(loginResponse.data.data?.access_token));
-			}
+		const token = loginResponse.data.data?.access_token;
+		const recData = async (token) => {
+			const { data } = await axios
+				.get('http://localhost:5000/user/info', {
+					headers: { Authorization: 'Bearer ' + token },
+				})
+				.catch((err) => console.log('Error', err));
+			console.log(data);
+			setData(data);
+		};
+		recData(token);
+		if (token) {
+			history.push('/user', { state: { data } });
 		}
 	};
+
 	const logout = () => {
 		localStorage.removeItem('user');
 	};
@@ -79,7 +90,13 @@ function Login() {
 						}}
 					/>
 
-					<button type="submit" onClick={submit}>
+					<button
+						type="submit"
+						onClick={() => {
+							submit();
+							<Table ladata={data?.data} />;
+						}}
+					>
 						Login
 					</button>
 				</div>
@@ -92,6 +109,6 @@ function Login() {
 			</form>
 		</>
 	);
-}
+};
 
 export default Login;
