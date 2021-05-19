@@ -44,7 +44,7 @@ const Table = ({ ladata }) => {
 		intermediateState[e.target.name] = e.target.value;
 		setForm({ ...intermediateState });
 		console.log(intermediateState);
-	
+	}
 	return (
 		<div>
 			<div className="date"> {moment().format('LL')}</div>
