@@ -2,7 +2,7 @@ const Prix = require('../../../models/prix');
 
 const addData = async (req, res) => {
 	const {
-		Allaoche,
+		Allache,
 		/*Anchois,
 		Sardine,
 		Saurel,
@@ -17,7 +17,7 @@ const addData = async (req, res) => {
 
 	try {
 		const newData = new Prix({
-			Allaoche,
+			Allache,
 			/*Anchois,
 			Sardine,
 			Saurel,
