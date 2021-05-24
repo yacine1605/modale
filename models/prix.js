@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 
 const prixSchema = new Schema(
 	{
-		Allaoche: {
+		Allache: {
 			Production: { type: String },
 
 			prix_debarquement: {
